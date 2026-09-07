@@ -121,6 +121,10 @@ UniTS/
 
 ## Run UniTS-Web
 
+<p align="center">
+  <img src="static/screenshot.png" alt="UniTS Web UI example" width="780" />
+</p>
+
 Activate the UniTS environment and enter the UniTS-Web directory:
 
 ```bash
@@ -135,11 +139,6 @@ On a remote server, bind to `0.0.0.0`:
 ```bash
 python start.py --host 0.0.0.0 --port 7860 --units-root /path/to/UniTS
 ```
-
-<p align="center">
-  <img src="static/screenshot.png" alt="UniTS Web UI example" width="780" />
-</p>
-
 
 If `UniTS-Web` and `UniTS` share the same parent directory, for example:
 
