@@ -5,7 +5,7 @@
 </p>
 
 
-UniTS-Web is a lightweight Web UI for UniTS transition-state initial guess generation. It is designed for the UniTS-Lib HiEGNN checkpoint, `units_hiegnn`, and supports SMILES or XYZ molecule input, reactive atom selection, batched sampling, trajectory visualization, and downloads for final XYZ, full trajectory XYZ, and Gaussian `.gjf` input files.
+UniTS-Web is a lightweight Web UI for [UniTS](https://github.com/licheng-xu-echo/UniTS) transition-state initial guess generation. It is designed for the UniTS-Lib HiEGNN checkpoint, `units_hiegnn`, and supports SMILES or XYZ molecule input, reactive atom selection, batched sampling, trajectory visualization, and downloads for final XYZ, full trajectory XYZ, and Gaussian `.gjf` input files. Related paper: https://www.nature.com/articles/s41467-026-77230-8.
 
 The project does not require Node.js, Vite, FastAPI, or Flask. The backend uses Python's standard-library HTTP server, and the frontend is static HTML/CSS/JavaScript. The 3D viewer uses a local copy of `3Dmol-min.js`, so the app can run on both Linux and Windows inside the UniTS Python environment.
 
@@ -135,6 +135,11 @@ On a remote server, bind to `0.0.0.0`:
 ```bash
 python start.py --host 0.0.0.0 --port 7860 --units-root /path/to/UniTS
 ```
+
+<p align="center">
+  <img src="static/screenshot.png" alt="UniTS Web UI example" width="780" />
+</p>
+
 
 If `UniTS-Web` and `UniTS` share the same parent directory, for example:
 
