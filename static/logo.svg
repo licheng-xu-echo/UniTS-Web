@@ -1,0 +1,26 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" role="img" aria-label="UniTS transition state energy barrier">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#0b1220"/>
+      <stop offset="1" stop-color="#17223b"/>
+    </linearGradient>
+    <linearGradient id="main" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#22d3ee"/>
+      <stop offset="1" stop-color="#818cf8"/>
+    </linearGradient>
+    <linearGradient id="accent" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#fbbf24"/>
+      <stop offset="1" stop-color="#fb7185"/>
+    </linearGradient>
+  </defs>
+  <rect x="16" y="16" width="480" height="480" rx="104" fill="url(#bg)"/>
+  <rect x="16" y="16" width="480" height="480" rx="104" fill="none" stroke="rgba(255,255,255,0.08)" stroke-width="4"/>
+  <line x1="84" y1="400" x2="416" y2="400" stroke="rgba(148,163,184,0.55)" stroke-width="8" stroke-linecap="round"/>
+  <polygon points="404,386 428,400 404,414" fill="#94a3b8"/>
+  <path d="M96 344 C150 128 200 92 256 92 C312 92 362 128 416 344"
+        fill="none" stroke="url(#main)" stroke-width="22" stroke-linecap="round"/>
+  <line x1="256" y1="110" x2="256" y2="392" stroke="url(#accent)" stroke-width="7" stroke-dasharray="12 12" opacity="0.85"/>
+  <circle cx="256" cy="92" r="20" fill="url(#accent)" stroke="#0b1220" stroke-width="6"/>
+  <circle cx="96" cy="344" r="13" fill="#64748b"/>
+  <circle cx="416" cy="344" r="13" fill="#64748b"/>
+</svg>

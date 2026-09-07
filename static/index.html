@@ -1,0 +1,202 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>UniTS-Web</title>
+    <link rel="icon" type="image/svg+xml" href="logo.svg" />
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <div class="app-shell">
+      <header class="header">
+        <div class="brand">
+          <img class="brand-logo" src="logo.svg" alt="UniTS-Web logo" />
+          <h1>UniTS-Web</h1>
+          <span class="subtitle">UniTS-Gen Transition State Generation</span>
+        </div>
+        <div class="header-actions">
+          <span class="model-badge">UniTS-Lib HiEGNN</span>
+          <span class="env" id="healthStatus">Server checking...</span>
+        </div>
+      </header>
+
+      <div class="body">
+        <aside class="sidebar">
+          <section class="panel model-panel">
+            <h3>1. Model</h3>
+            <select disabled>
+              <option>units_hiegnn - UniTS-Lib HiEGNN</option>
+            </select>
+            <div class="model-info">
+              <span>Fixed inference backend</span>
+              <span class="badge ok">Ready when weights exist</span>
+            </div>
+          </section>
+
+          <section class="panel">
+            <div class="panel-title-row">
+              <h3>2. Input Molecule</h3>
+              <button id="clearCurrentBtn" type="button" class="link-button">Reset</button>
+            </div>
+
+            <div class="tabs" role="tablist">
+              <button id="smilesTab" class="tab active" type="button">SMILES</button>
+              <button id="xyzTab" class="tab" type="button">XYZ Upload</button>
+            </div>
+
+            <label class="field compact-field">
+              <span>Name</span>
+              <input id="molName" type="text" placeholder="optional, e.g. reaction-001" />
+            </label>
+
+            <div class="grid2 molecule-settings">
+              <label>
+                Charge
+                <input id="chargeInput" type="number" value="0" />
+              </label>
+              <label>
+                Multiplicity
+                <input id="multiInput" type="number" min="1" max="5" value="1" />
+              </label>
+            </div>
+
+            <label class="field smiles-only">
+              <span>SMILES</span>
+              <textarea id="smilesInput" class="smiles-input" rows="4" spellcheck="false" placeholder="Input reaction SMILES"></textarea>
+            </label>
+
+            <div class="field xyz-only hidden">
+              <span>XYZ file or text</span>
+              <input id="xyzFile" type="file" accept=".xyz,text/plain" />
+              <textarea id="xyzInput" class="smiles-input" rows="6" spellcheck="false" placeholder="Paste XYZ content"></textarea>
+            </div>
+
+            <button id="parseBtn" type="button" class="primary">Load & Preview</button>
+            <div class="hint" id="graphMeta">No molecule loaded</div>
+            <div class="svg-preview">
+              <svg id="moleculeGraph" viewBox="0 0 720 420" aria-label="molecule graph"></svg>
+            </div>
+          </section>
+
+          <section class="panel">
+            <h3>3. Reactive Atoms</h3>
+            <input id="atomIndexInput" type="text" placeholder="e.g. 5,12 or 0,3,5" />
+            <div class="hint">0-based atom indices. Click atoms in the 2D graph to toggle reactive sites.</div>
+            <div id="reactiveChips" class="chips"></div>
+          </section>
+
+          <section class="panel">
+            <h3>4. Generation Parameters</h3>
+            <div class="grid2">
+              <label>
+                Samples per molecule
+                <input id="samplesInput" type="number" min="2" value="10" />
+              </label>
+              <label>
+                Batch size
+                <input id="batchInput" type="number" min="2" value="10" />
+              </label>
+              <label>
+                Random seed
+                <input id="seedInput" type="number" placeholder="blank = random" />
+              </label>
+            </div>
+            <label class="check">
+              <input id="saveTrajectoryInput" type="checkbox" checked />
+              Save and show the full generation trajectory
+            </label>
+          </section>
+
+          <div class="queue-action-bar">
+            <button id="addMoleculeBtn" type="button" class="primary add-molecule" disabled>Add molecule to queue</button>
+          </div>
+
+          <section class="panel queue-panel">
+            <div class="panel-title-row">
+              <h3>5. Molecule Queue</h3>
+              <button id="clearMoleculesBtn" type="button" class="link-button">Clear</button>
+            </div>
+            <div id="moleculeList" class="molecule-list empty">No molecules queued</div>
+            <button id="startJobBtn" type="button" class="primary generate" disabled>Generate TS Initial Guess</button>
+            <button id="stopJobBtn" type="button" class="danger stop-job" disabled>Stop generation</button>
+          </section>
+
+          <section class="panel job-panel">
+            <h3>Job Status</h3>
+            <div class="status-line">
+              <span class="badge run" id="jobTitle">Idle</span>
+              <span class="progress-text" id="jobPercent">0%</span>
+            </div>
+            <div class="progress-bar"><div id="jobProgress"></div></div>
+            <details open>
+              <summary>Log</summary>
+              <pre id="jobLog" class="log"></pre>
+            </details>
+          </section>
+
+          <section class="panel gaussian-panel">
+            <details>
+              <summary>Gaussian GJF Settings</summary>
+              <div class="hint">Used only for downloadable Gaussian input files. Defaults are applied when this panel stays closed.</div>
+              <div class="grid2 gaussian-grid">
+                <label>
+                  nproc
+                  <input id="nprocInput" type="number" min="1" value="16" />
+                </label>
+                <label>
+                  mem
+                  <input id="memInput" type="text" value="32GB" />
+                </label>
+                <label class="wide-field">
+                  Method / basis
+                  <span class="inline-inputs">
+                    <input id="methodInput" type="text" value="b3lyp" />
+                    <input id="basisInput" type="text" value="def2svp" />
+                  </span>
+                </label>
+              </div>
+            </details>
+          </section>
+        </aside>
+
+        <main class="main">
+          <div class="viewer-tabs">
+            <span class="viewer-title">Input molecule 2D preview - click atoms to pick reactive sites</span>
+            <span class="viewer-meta" id="inputViewerMeta">No input</span>
+          </div>
+          <div class="viewer input-viewer">
+            <svg id="moleculeGraphLarge" viewBox="0 0 1100 520" aria-label="large molecule graph"></svg>
+            <div id="inputEmpty" class="viewer-empty">Load a SMILES or XYZ molecule to preview its graph.</div>
+          </div>
+
+          <div class="result-toolbar">
+            <span class="viewer-title">Generated result</span>
+            <select id="sampleSelect" disabled>
+              <option>No result</option>
+            </select>
+            <label class="check compact-check">
+              <input id="trajectoryModeInput" type="checkbox" checked />
+              Trajectory mode
+            </label>
+            <button id="playBtn" type="button" disabled>Play</button>
+            <input id="frameSlider" type="range" min="0" max="0" value="0" disabled />
+            <span id="frameLabel" class="hint frame-label">Frame 0/0</span>
+          </div>
+
+          <div class="viewer result-viewer">
+            <div id="mol3dViewer" class="mol3d-viewer"></div>
+            <canvas id="viewerCanvas" width="1100" height="420"></canvas>
+            <div id="resultEmpty" class="viewer-empty">Generated structures will appear here.</div>
+          </div>
+
+          <div id="downloadLinks" class="download-links"></div>
+        </main>
+      </div>
+    </div>
+
+    <div id="toast" class="toast hidden"></div>
+    <script src="vendor/3Dmol-min.js"></script>
+    <script src="app.js"></script>
+  </body>
+</html>
